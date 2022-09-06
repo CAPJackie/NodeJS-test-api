@@ -9,13 +9,13 @@ const campaignSchema = new mongoose.Schema({
   _contacts: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: 'Contact',
-    },
+      ref: 'Contact'
+    }
   ],
   _authorId: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User',
-  },
+    ref: 'User'
+  }
 });
 
 const Campaign = mongoose.model('Campaign', campaignSchema);
