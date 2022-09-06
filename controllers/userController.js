@@ -1,24 +1,42 @@
-// const User = require('../models/userModel');
+import catchAsync from '../utils/catchAsync';
+import User from '../models/userModel.js';
 
-const getUsers = (req, res) => {
-  res
-    .status(500)
-    .json({ status: 'error', message: 'This route is not yet implemented' });
-};
-const createUser = (req, res) => {
-  res
-    .status(500)
-    .json({ status: 'error', message: 'This route is not yet implemented' });
-};
-const updateUser = (req, res) => {
-  res
-    .status(500)
-    .json({ status: 'error', message: 'This route is not yet implemented' });
-};
-const updateUserAttribute = (req, res) => {
-  res
-    .status(500)
-    .json({ status: 'error', message: 'This route is not yet implemented' });
-};
+const getUsers = catchAsync(async (req, res) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    status: 'success',
+    results: users.length,
+    data: {
+      users
+    }
+  });
+});
+
+const createUser = catchAsync(async (req, res) => {});
+
+const updateUser = catchAsync(async (req, res) => {
+  const user = User.findByIdAndUpdate(req.params.id, req.body, {
+    runValidators: true
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: { user }
+  });
+});
+
+const updateUserAttribute = catchAsync(async (req, res) => {
+  const user = User.findByIdAndUpdate(
+    req.params.id,
+    { ...req.body.roles, ...req.body.username },
+    { runValidators: true }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: { user }
+  });
+});
 
 export { getUsers, createUser, updateUser, updateUserAttribute };
