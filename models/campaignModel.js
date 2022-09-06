@@ -1,5 +1,5 @@
 // @ts-nocheck
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const campaignSchema = new mongoose.Schema({
   description: String,
@@ -20,7 +20,7 @@ const campaignSchema = new mongoose.Schema({
 
 const Campaign = mongoose.model('Campaign', campaignSchema);
 
-module.exports = Campaign;
+export default Campaign;
 
 // campaigns
 // - description: String

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const httpStatus = require('http-status');
-const ApiError = require('../utils/ApiError');
+import mongoose from 'mongoose';
+import httpStatus from 'http-status';
+import ApiError from '../utils/ApiError.js';
 
 const errorConverter = (err, req, res, next) => {
   let error = err;
@@ -37,7 +37,4 @@ const errorHandler = (err, req, res, next) => {
   res.status(statusCode).send(response);
 };
 
-module.exports = {
-  errorConverter,
-  errorHandler
-};
+export { errorConverter, errorHandler };

@@ -21,4 +21,4 @@ const updateUserAttribute = (req, res) => {
     .json({ status: 'error', message: 'This route is not yet implemented' });
 };
 
-module.exports = { getUsers, createUser, updateUser, updateUserAttribute };
+export { getUsers, createUser, updateUser, updateUserAttribute };

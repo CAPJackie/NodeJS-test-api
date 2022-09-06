@@ -1,10 +1,13 @@
-const express = require('express');
+import express from 'express';
+import {
+  createCampaign,
+  sendEmails
+} from '../controllers/campaignController.js';
 
 const router = express.Router();
-const campaignController = require('../controllers/campaignController');
 
-router.route('/').post(campaignController.createCampaign);
+router.route('/').post(createCampaign);
 
-router.route('/:id/send_emails').post(campaignController.sendEmails);
+router.route('/:id/send_emails').post(sendEmails);
 
-module.exports = router;
+export default router;
