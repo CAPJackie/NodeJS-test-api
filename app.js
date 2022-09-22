@@ -14,6 +14,7 @@ import campaignRoutes from './routes/campaignRoutes.js';
 import contactsRoutes from './routes/contactRoutes.js';
 import ApiError from './utils/ApiError.js';
 import { errorConverter, errorHandler } from './middlewares/error.js';
+import verifyToken from './middlewares/verifyToken.js';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -45,6 +46,10 @@ app.use(compression());
 app.use(cors());
 app.options('*', cors());
 
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/campaigns', verifyToken, campaignRoutes);
+app.use('/api/v1/contacts', verifyToken, contactsRoutes);
+
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
@@ -55,11 +60,5 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
-
-app.use(express.static(`${__dirname}/public`));
-
-app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/campaigns', campaignRoutes);
-app.use('/api/v1/contacts', contactsRoutes);
 
 export default app;
