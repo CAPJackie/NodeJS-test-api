@@ -3,8 +3,9 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
+import { USER_ROLES } from '../utils/constants.js';
 
-const getUsers = catchAsync(async (req, res) => {
+const getUsers = catchAsync(async (_, res) => {
   const users = await User.find();
 
   res.status(200).json({
@@ -58,15 +59,21 @@ const updateUser = catchAsync(async (req, res) => {
 });
 
 const updateUserAttribute = catchAsync(async (req, res) => {
-  const user = User.findByIdAndUpdate(
+  if (!USER_ROLES[req.body.role]) {
+    res.status(500).json({
+      status: 'failed',
+      message: `Role is not valid`
+    });
+  }
+  const user = await User.findByIdAndUpdate(
     req.params.id,
-    { ...req.body.roles, ...req.body.username },
+    { roles: [req.body.role] },
     { runValidators: true }
   );
 
   res.status(200).json({
     status: 'success',
-    data: { user }
+    message: `Role of ${user.username} updated`
   });
 });
 

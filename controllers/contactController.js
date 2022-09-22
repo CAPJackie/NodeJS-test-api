@@ -1,7 +1,7 @@
 import Contact from '../models/contactModel.js';
 import catchAsync from '../utils/catchAsync.js';
 
-const getContacts = catchAsync(async (req, res, next) => {
+const getContacts = catchAsync(async (_, res) => {
   const contacts = await Contact.find();
 
   res.status(200).json({
