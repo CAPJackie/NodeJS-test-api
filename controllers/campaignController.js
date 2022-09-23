@@ -3,11 +3,11 @@ import Campaign from '../models/campaignModel.js';
 import catchAsync from '../utils/catchAsync.js';
 
 const createCampaign = catchAsync(async (req, res) => {
-  const newCampaign = await Campaign.create(req.body);
+  await Campaign.create(req.body);
 
   res.status(httpStatus.CREATED).json({
     status: 'success',
-    data: { campaign: newCampaign }
+    message: `New Campaign created`
   });
 });
 

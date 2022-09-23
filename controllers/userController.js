@@ -21,7 +21,7 @@ const createUser = catchAsync(async (req, res) => {
     roles: req.body.roles
   });
 
-  res.status(200).json({
+  res.status(201).json({
     status: 'success',
     message: `New user ${req.body.username} created`
   });

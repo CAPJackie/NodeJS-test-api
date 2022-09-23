@@ -1,23 +1,30 @@
 // @ts-nocheck
 import mongoose from 'mongoose';
+import validator from 'validator';
 
 const contactSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: [true, 'You need an email']
+    required: [true, 'You need an email'],
+    lowercase: true,
+    validate: [validator.isEmail, 'Please provide a valid email']
   },
-  isLead: Boolean,
+  isLead: { type: Boolean, default: false },
   _authorId: {
-    type: mongoose.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }
+});
+
+contactSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: '_authorId',
+    select: 'username'
+  });
+
+  next();
 });
 
 const Contact = mongoose.model('Contact', contactSchema);
 
 export default Contact;
-
-// contacts
-// - email: String
-// - isLead: Boolean
-// - _authorId: Object() (relacionado a users)

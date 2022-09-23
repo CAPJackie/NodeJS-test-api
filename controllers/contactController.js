@@ -6,24 +6,36 @@ const getContacts = catchAsync(async (_, res) => {
 
   res.status(200).json({
     status: 'success',
-    results: contacts.length,
-    data: { contacts }
+    contacts
   });
 });
 
-const createContact = catchAsync(async (req, res, next) => {
-  const newContact = await Contact.create(req.body);
+const createContact = catchAsync(async (req, res) => {
+  await Contact.create(req.body);
 
   res.status(201).json({
     status: 'success',
-    data: { contact: newContact }
+    message: `New contact ${req.body.email} created`
   });
 });
 
-const updateContact = catchAsync(async (req, res, next) => {
+const updateContact = catchAsync(async (req, res) => {
+  if (!req.body.email || !req.body.isLead) {
+    res.status(500).json({
+      status: 'failed',
+      message: `You should include value for email and isLead`
+    });
+  }
   const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, {
     runValidators: true
   });
+
+  if (!contact) {
+    res.status(500).json({
+      status: 'failed',
+      message: `Contact doesn't exist`
+    });
+  }
 
   res.status(200).json({
     status: 'success',
