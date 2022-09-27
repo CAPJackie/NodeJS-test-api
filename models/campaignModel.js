@@ -1,7 +1,5 @@
 // @ts-nocheck
 import mongoose from 'mongoose';
-import Contact from './contactModel';
-import User from './userModel';
 
 const campaignSchema = new mongoose.Schema({
   description: {
@@ -20,14 +18,17 @@ const campaignSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  contacts: [
-    {
-      type: Contact,
-      ref: 'Contact'
-    }
-  ],
+  contacts: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Contact'
+      }
+    ],
+    required: true
+  },
   author: {
-    type: User,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }
 });

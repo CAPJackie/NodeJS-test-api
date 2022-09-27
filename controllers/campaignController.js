@@ -10,7 +10,8 @@ const createCampaign = catchAsync(async (req, res) => {
   const contacts = await Contact.find({ email: { $in: req.body.emails } });
 
   const campaign = new Campaign(req.body);
-  campaign.author = user;
+  await campaign.validate();
+  campaign.author = user._id;
   campaign.contacts = contacts;
 
   campaign.save();

@@ -17,7 +17,7 @@ const createContact = catchAsync(async (req, res) => {
   const user = await User.findById(req.id);
 
   const contact = new Contact(req.body);
-  contact.author = user;
+  contact.author = user._id;
 
   contact.save();
 
@@ -41,16 +41,16 @@ const updateContact = catchAsync(async (req, res) => {
 
   res.status(200).json({
     status: 'success',
-    data: { contact }
+    message: `Contact ${contact.email} updated`
   });
 });
 
 const deleteContact = catchAsync(async (req, res, next) => {
-  await Contact.findByIdAndDelete(req.params.id);
+  const contact = await Contact.findByIdAndDelete(req.params.id);
 
   res.status(204).json({
     status: 'success',
-    data: null
+    data: `Contact ${contact.email} deleted`
   });
 });
 

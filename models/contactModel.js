@@ -1,7 +1,6 @@
 // @ts-nocheck
 import mongoose from 'mongoose';
 import validator from 'validator';
-import User from './userModel';
 
 const contactSchema = new mongoose.Schema({
   email: {
@@ -13,7 +12,7 @@ const contactSchema = new mongoose.Schema({
   },
   isLead: { type: Boolean, default: false },
   author: {
-    type: User,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }
 });
