@@ -1,9 +1,7 @@
 // @ts-nocheck
 
-import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
-import { USER_ROLES } from '../utils/constants.js';
 
 const getUsers = catchAsync(async (_, res) => {
   const users = await User.find();
@@ -28,15 +26,12 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  // TODO: How to run validators for updated password
+  const user = await User.findById(req.params.id);
+  user.username = req.body.username;
+  user.password = req.body.password;
+  user.roles = req.body.roles;
 
-  const requestBody = {
-    ...req.body,
-    password: await bcrypt.hash(req.body.password, 12)
-  };
-  const user = await User.findByIdAndUpdate(req.params.id, requestBody, {
-    runValidators: true
-  });
+  user.save();
 
   if (!user) {
     res.status(500).json({
@@ -51,13 +46,7 @@ const updateUser = catchAsync(async (req, res) => {
   });
 });
 
-const updateUserAttribute = catchAsync(async (req, res) => {
-  if (!USER_ROLES[req.body.role]) {
-    res.status(500).json({
-      status: 'failed',
-      message: `Role is not valid`
-    });
-  }
+const updateRole = catchAsync(async (req, res) => {
   const user = await User.findByIdAndUpdate(
     req.params.id,
     { roles: [req.body.role] },
@@ -70,4 +59,4 @@ const updateUserAttribute = catchAsync(async (req, res) => {
   });
 });
 
-export { getUsers, createUser, updateUser, updateUserAttribute };
+export { getUsers, createUser, updateUser, updateRole };

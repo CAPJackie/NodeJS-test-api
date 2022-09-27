@@ -28,12 +28,6 @@ const createContact = catchAsync(async (req, res) => {
 });
 
 const updateContact = catchAsync(async (req, res) => {
-  if (!req.body.email || !req.body.isLead) {
-    res.status(500).json({
-      status: 'failed',
-      message: `You should include value for email and isLead`
-    });
-  }
   const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, {
     runValidators: true
   });
