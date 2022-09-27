@@ -4,8 +4,9 @@ import Contact from '../models/contactModel.js';
 import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
 
-const getContacts = catchAsync(async (_, res) => {
-  const contacts = await Contact.find();
+const getContacts = catchAsync(async (req, res) => {
+  console.log(req.query);
+  const contacts = await Contact.find(req.query);
 
   res.status(200).json({
     status: 'success',
