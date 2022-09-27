@@ -8,7 +8,8 @@ const { USER, ADMIN } = USER_ROLES;
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: [true, 'Please tell us your username!']
+    required: [true, 'Please tell us your username!'],
+    unique: true
   },
   password: {
     type: String,
@@ -17,7 +18,7 @@ const userSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   },
   updatedAt: Date,
   roles: {
@@ -35,6 +36,7 @@ userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
 
   this.password = await bcrypt.hash(this.password, 12);
+  this.updatedAt = Date.now();
 
   next();
 });
@@ -49,10 +51,3 @@ userSchema.methods.checkCorrectPassword = async (
 const User = mongoose.model('User', userSchema);
 
 export default User;
-
-// users:
-// - username: String
-// - password: String (debe almacenarse con el algoritmo sha256)
-// - createdAt: Date
-// - updatedAt: Date
-// - roles: array (Admin, User)

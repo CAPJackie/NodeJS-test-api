@@ -28,13 +28,6 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  if (!req.body.username || !req.body.password || !req.body.roles) {
-    res.status(500).json({
-      status: 'failed',
-      message: `You should include value for username, password and roles`
-    });
-  }
-
   // TODO: How to run validators for updated password
 
   const requestBody = {

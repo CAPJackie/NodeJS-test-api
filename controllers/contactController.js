@@ -1,4 +1,7 @@
+// @ts-nocheck
+import httpStatus from 'http-status';
 import Contact from '../models/contactModel.js';
+import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
 
 const getContacts = catchAsync(async (_, res) => {
@@ -11,9 +14,14 @@ const getContacts = catchAsync(async (_, res) => {
 });
 
 const createContact = catchAsync(async (req, res) => {
-  await Contact.create(req.body);
+  const user = await User.findById(req.id);
 
-  res.status(201).json({
+  const contact = new Contact(req.body);
+  contact.author = user;
+
+  contact.save();
+
+  res.status(httpStatus.CREATED).json({
     status: 'success',
     message: `New contact ${req.body.email} created`
   });
